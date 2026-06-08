@@ -41,11 +41,243 @@
             overflow: hidden;
         }
 
+        /* ── App Layout ──────────────────────────────────────────────── */
+        .app-container {
+            display: flex;
+            width: 100%;
+            height: 90vh;
+            max-width: 1360px;
+            gap: 16px;
+            align-items: flex-start;
+        }
+
+        /* ── Sidebar Panel ───────────────────────────────────────────── */
+        .sidebar-panel {
+            width: 280px;
+            flex-shrink: 0;
+            height: 100%;
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 8px 32px 0 rgba(0,0,0,0.4);
+        }
+        .sidebar-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(0,0,0,0.15);
+        }
+        .sidebar-header h3 {
+            font-size: 15px;
+            font-weight: 700;
+            margin: 0 0 8px 0;
+            color: var(--text-primary);
+        }
+        .mcp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #aaa;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 20px;
+            padding: 3px 10px;
+        }
+        .mcp-badge.connected {
+            color: #4ade80;
+            border-color: rgba(74,222,128,0.3);
+            background: rgba(74,222,128,0.08);
+        }
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4ade80;
+            animation: pulse 1.8s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+        .tools-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) transparent;
+        }
+        .sidebar-loading, .sidebar-empty, .sidebar-error {
+            color: var(--text-secondary);
+            font-size: 12px;
+            text-align: center;
+            padding: 24px 12px;
+        }
+        .sidebar-error { color: #ff7043; }
+        .tool-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        .tool-card:hover {
+            background: rgba(168,148,255,0.06);
+            border-color: rgba(168,148,255,0.4);
+        }
+        .tool-card-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #a894ff;
+            margin-bottom: 5px;
+        }
+        .tool-card-desc {
+            font-size: 11.5px;
+            color: var(--text-secondary);
+            line-height: 1.45;
+            margin-bottom: 8px;
+        }
+        .tool-card-params {
+            border-top: 1px solid var(--border-color);
+            padding-top: 8px;
+        }
+        .param-title {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
+        }
+        .param-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-primary);
+            padding: 2px 0;
+        }
+
+        /* ── Debug Drawer ────────────────────────────────────────────── */
+        .debug-drawer {
+            background: rgba(0,0,0,0.55);
+            border-top: 1px solid var(--border-color);
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1);
+            flex-shrink: 0;
+        }
+        .debug-drawer.open {
+            max-height: 240px;
+        }
+        .debug-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-size: 11.5px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            background: rgba(0,0,0,0.2);
+        }
+        .btn-debug-clear {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            font-size: 10px;
+            padding: 2px 8px;
+            cursor: pointer;
+            transition: border-color 0.15s, color 0.15s;
+        }
+        .btn-debug-clear:hover { color: #fff; border-color: rgba(255,255,255,0.3); }
+        .debug-logs {
+            height: 180px;
+            overflow-y: auto;
+            padding: 8px 12px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border-color) transparent;
+        }
+        .debug-placeholder {
+            color: var(--text-secondary);
+            font-size: 11px;
+            text-align: center;
+            padding: 24px 12px;
+        }
+        .log-row {
+            font-size: 10.5px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            line-height: 1.5;
+            margin: 1px 0;
+            white-space: pre-wrap;
+            word-break: break-all;
+            color: var(--text-secondary);
+        }
+        .log-row.status { color: #94a3b8; }
+        .log-row.rpc-req { color: #7dd3fc; }
+        .log-row.rpc-resp { color: #6ee7b7; }
+        .log-row.llm-req { color: #a894ff; }
+        .log-row.llm-resp { color: #c4b5fd; }
+        .log-time {
+            color: rgba(255,255,255,0.2);
+            margin-right: 6px;
+        }
+
+        /* ── Timeline Stepper ────────────────────────────────────────── */
+        .timeline-stepper {
+            padding: 4px 0 10px 0;
+        }
+        .timeline-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 5px 0;
+            font-size: 12.5px;
+            color: var(--text-secondary);
+            position: relative;
+        }
+        .timeline-step + .timeline-step::before {
+            content: '';
+            position: absolute;
+            left: 9px;
+            top: -8px;
+            width: 2px;
+            height: 8px;
+            background: var(--border-color);
+        }
+        .step-icon {
+            font-size: 14px;
+            line-height: 1;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+        .step-content {
+            flex: 1;
+            line-height: 1.5;
+        }
+        .step-searching .step-content { color: #93c5fd; }
+        .step-results .step-content { color: #86efac; }
+        .step-warning .step-content { color: #fbbf24; }
+        .step-tool .step-content { color: #c4b5fd; }
+        .step-llm .step-content { color: #a894ff; }
+        .step-sources {
+            margin-top: 5px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
         /* Container */
         .chat-window {
-            width: 100%;
-            max-width: 900px;
-            height: 90vh;
+            flex: 1;
+            min-width: 0;
+            height: 100%;
             background: var(--panel-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
@@ -513,11 +745,371 @@
             color: #ffffff;
             box-shadow: 0 0 8px rgba(124, 93, 250, 0.2);
         }
+
+        /* App Container Layout */
+        .app-container {
+            display: flex;
+            gap: 20px;
+            width: 95%;
+            max-width: 1250px;
+            height: 90vh;
+            align-items: stretch;
+            position: relative;
+        }
+
+        /* Collapsible Tools Sidebar */
+        .sidebar-panel {
+            width: 300px;
+            background: var(--panel-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+
+        .mcp-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            margin-top: 8px;
+            font-weight: 500;
+            width: fit-content;
+        }
+        
+        .mcp-badge.connected {
+            background: rgba(76, 175, 80, 0.08);
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            color: #81c784;
+        }
+        
+        .pulse-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4caf50;
+            box-shadow: 0 0 6px #4caf50;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(0.9); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(0.9); opacity: 0.7; }
+        }
+
+        .tools-list {
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            padding-right: 4px;
+        }
+
+        .sidebar-loading, .sidebar-empty, .sidebar-error {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-top: 40px;
+            font-style: italic;
+        }
+
+        .sidebar-error {
+            color: #ff5252;
+        }
+
+        .tool-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 14px;
+            padding: 14px;
+            transition: all 0.25s ease;
+        }
+        
+        .tool-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--accent-color);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(124, 93, 250, 0.1);
+        }
+
+        .tool-card-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #a894ff;
+            margin-bottom: 6px;
+            font-family: monospace;
+            letter-spacing: 0.3px;
+        }
+
+        .tool-card-desc {
+            font-size: 11px;
+            color: var(--text-secondary);
+            line-height: 1.45;
+            margin-bottom: 10px;
+        }
+
+        .tool-card-params {
+            font-size: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 8px 10px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .param-title {
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            font-size: 9px;
+            letter-spacing: 0.5px;
+        }
+
+        .param-item {
+            display: flex;
+            justify-content: space-between;
+            font-family: monospace;
+            color: #cfc5ff;
+            margin-bottom: 4px;
+        }
+        
+        .param-item:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Debug Drawer styling */
+        .debug-drawer {
+            height: 0px;
+            background: #07080c;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            transition: height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .debug-drawer.open {
+            height: 240px;
+        }
+
+        .debug-header {
+            padding: 10px 24px;
+            background: rgba(255, 255, 255, 0.02);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
+
+        .btn-debug-clear {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            border-radius: 4px;
+            padding: 2px 8px;
+            cursor: pointer;
+            font-size: 10px;
+            transition: all 0.2s;
+        }
+
+        .btn-debug-clear:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .debug-logs {
+            flex: 1;
+            padding: 14px 24px;
+            overflow-y: auto;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, Courier, monospace;
+            font-size: 11px;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            background: #050608;
+        }
+
+        .debug-placeholder {
+            color: rgba(255, 255, 255, 0.2);
+            font-style: italic;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .log-row {
+            margin: 0;
+            word-break: break-all;
+            white-space: pre-wrap;
+            border-left: 2px solid transparent;
+            padding-left: 8px;
+        }
+        
+        .log-row.status {
+            color: #90a4ae;
+            border-color: #607d8b;
+        }
+        
+        .log-row.rpc-req {
+            color: #81c784;
+            border-color: #4caf50;
+        }
+        
+        .log-row.rpc-resp {
+            color: #4fc3f7;
+            border-color: #03a9f4;
+        }
+        
+        .log-row.llm-req {
+            color: #ffb74d;
+            border-color: #ff9800;
+        }
+        
+        .log-row.llm-resp {
+            color: #e040fb;
+            border-color: #d500f9;
+        }
+        
+        .log-time {
+            color: rgba(255, 255, 255, 0.15);
+            margin-right: 8px;
+        }
+
+        /* Timeline Stepper styling inside chat */
+        .timeline-stepper {
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .timeline-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            animation: fadeInStep 0.25s ease-out forwards;
+        }
+
+        @keyframes fadeInStep {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .timeline-step.running {
+            color: #cfc5ff;
+        }
+
+        .timeline-step.success {
+            color: var(--text-primary);
+        }
+
+        .timeline-step.error {
+            color: #ff5252;
+        }
+
+        .step-icon {
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 18px;
+        }
+
+        .step-content {
+            flex: 1;
+            line-height: 1.4;
+        }
+
+        .tool-args {
+            font-family: monospace;
+            font-size: 11px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1px 4px;
+            border-radius: 4px;
+            color: #ffb74d;
+        }
+
+        .tool-result-details {
+            margin-top: 5px;
+            font-size: 11px;
+        }
+
+        .tool-result-details summary {
+            cursor: pointer;
+            color: #4fc3f7;
+            font-weight: 500;
+            outline: none;
+        }
+
+        .tool-result-details pre {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            overflow-x: auto;
+            font-family: monospace;
+            color: #e0e0e0;
+            margin-top: 4px;
+            max-height: 150px;
+        }
     </style>
 </head>
 
 <body>
-    <div class="chat-window">
+    <div class="app-container">
+        <!-- Left Sidebar: Dynamic MCP Tools Panel -->
+        <aside class="sidebar-panel" id="sidebar-panel">
+            <div class="sidebar-header">
+                <h3>🧰 MCP Tools</h3>
+                <span class="mcp-badge connected" id="mcp-badge">
+                    <span class="pulse-dot"></span>
+                    Connected via stdio
+                </span>
+            </div>
+            <div class="tools-list" id="tools-list">
+                <div class="sidebar-loading" id="tools-loading">⏳ Discovering tools...</div>
+            </div>
+        </aside>
+
+        <div class="chat-window">
         <!-- Header -->
         <header class="chat-header">
             <div class="header-left">
@@ -528,6 +1120,7 @@
                 </div>
             </div>
             <div class="header-actions">
+                <button onclick="toggleDebugDrawer()" class="btn-action" id="btn-debug-toggle">🐞 Debug</button>
                 <button onclick="clearChat()" class="btn-action btn-clear">Clear Chat</button>
             </div>
         </header>
@@ -562,13 +1155,138 @@
                 </div>
             </div>
         </div>
-    </div>
+
+        <!-- Debug Drawer -->
+        <div class="debug-drawer" id="debug-drawer">
+            <div class="debug-header">
+                <span>⚡ JSON-RPC &amp; MCP Trace Log</span>
+                <button class="btn-debug-clear" onclick="clearDebugLogs()">Clear</button>
+            </div>
+            <div class="debug-logs" id="debug-logs">
+                <div class="debug-placeholder" id="debug-placeholder">No events yet. Send a message to see live MCP &amp; LLM traces.</div>
+            </div>
+        </div>
+
+        </div><!-- /chat-window -->
+    </div><!-- /app-container -->
 
     <script>
         const API_BASE = 'http://127.0.0.1:8435';
         const sessionName = 'playground_' + Math.random().toString(36).substring(2, 10);
         let chatHistory = [];
         let isGenerating = false;
+        let debugOpen = false;
+
+        // ── Tools Sidebar ──────────────────────────────────────────────
+        async function loadMcpTools() {
+            const listEl = document.getElementById('tools-list');
+            const loadingEl = document.getElementById('tools-loading');
+            try {
+                const res = await fetch(`${API_BASE}/tools`);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const tools = await res.json();
+                listEl.innerHTML = '';
+                if (!tools.length) {
+                    listEl.innerHTML = '<div class="sidebar-empty">No tools discovered.</div>';
+                    return;
+                }
+                tools.forEach(tool => {
+                    const props = (tool.inputSchema && tool.inputSchema.properties) ? tool.inputSchema.properties : {};
+                    const required = (tool.inputSchema && tool.inputSchema.required) ? tool.inputSchema.required : [];
+                    const paramsHTML = Object.entries(props).map(([k, v]) => `
+                        <div class="param-item">
+                            <span>${escapeHTML(k)}${required.includes(k) ? ' <span style="color:#ff7043">*</span>' : ''}</span>
+                            <span style="color:var(--text-secondary)">${escapeHTML(v.type || '?')}</span>
+                        </div>
+                    `).join('');
+                    const card = document.createElement('div');
+                    card.className = 'tool-card';
+                    card.innerHTML = `
+                        <div class="tool-card-name">⚙️ ${escapeHTML(tool.name)}</div>
+                        <div class="tool-card-desc">${escapeHTML(tool.description || '')}</div>
+                        ${paramsHTML ? `<div class="tool-card-params">
+                            <div class="param-title">Parameters</div>
+                            ${paramsHTML}
+                        </div>` : ''}
+                    `;
+                    listEl.appendChild(card);
+                });
+            } catch (e) {
+                listEl.innerHTML = `<div class="sidebar-error">⚠️ Failed to load tools</div>`;
+                document.getElementById('mcp-badge').className = 'mcp-badge';
+                document.getElementById('mcp-badge').innerHTML = '⚠️ Disconnected';
+            }
+        }
+
+        // ── Debug Drawer ───────────────────────────────────────────────
+        function toggleDebugDrawer() {
+            debugOpen = !debugOpen;
+            const drawer = document.getElementById('debug-drawer');
+            const btn = document.getElementById('btn-debug-toggle');
+            drawer.classList.toggle('open', debugOpen);
+            btn.style.borderColor = debugOpen ? 'var(--accent-color)' : '';
+            btn.style.color = debugOpen ? '#a894ff' : '';
+        }
+
+        function clearDebugLogs() {
+            const logs = document.getElementById('debug-logs');
+            logs.innerHTML = '<div class="debug-placeholder" id="debug-placeholder">No events yet. Send a message to see live MCP &amp; LLM traces.</div>';
+        }
+
+        function appendDebugLog(event) {
+            const logs = document.getElementById('debug-logs');
+            const placeholder = document.getElementById('debug-placeholder');
+            if (placeholder) placeholder.remove();
+
+            const now = new Date();
+            const timeStr = now.toTimeString().slice(0, 8);
+            const row = document.createElement('pre');
+            row.className = 'log-row';
+
+            if (event.type === 'status') {
+                row.classList.add('status');
+                row.innerHTML = `<span class="log-time">${timeStr}</span>🔧 [STATUS] ${escapeHTML(event.message)}`;
+            } else if (event.type === 'rpc' && event.direction === 'request') {
+                const cls = event.method.startsWith('ollama') ? 'llm-req' : 'rpc-req';
+                row.classList.add(cls);
+                const arrow = event.method.startsWith('ollama') ? '🧠' : '→';
+                row.innerHTML = `<span class="log-time">${timeStr}</span>${arrow} [REQ] ${escapeHTML(event.method)} ${JSON.stringify(event.params || {}).slice(0, 120)}`;
+            } else if (event.type === 'rpc' && event.direction === 'response') {
+                const cls = event.method.startsWith('ollama') ? 'llm-resp' : 'rpc-resp';
+                row.classList.add(cls);
+                const arrow = event.method.startsWith('ollama') ? '💬' : '←';
+                row.innerHTML = `<span class="log-time">${timeStr}</span>${arrow} [RES] ${escapeHTML(event.method)} ${JSON.stringify(event.result || {}).slice(0, 200)}`;
+            }
+
+            logs.appendChild(row);
+            logs.scrollTop = logs.scrollHeight;
+        }
+
+        // ── Timeline Stepper ───────────────────────────────────────────
+        function getOrCreateStepper(bubbleDiv) {
+            const statusContainer = bubbleDiv.querySelector('.search-status-container');
+            let stepper = statusContainer.querySelector('.timeline-stepper');
+            if (!stepper) {
+                stepper = document.createElement('div');
+                stepper.className = 'timeline-stepper';
+                statusContainer.prepend(stepper);
+            }
+            return stepper;
+        }
+
+        function appendTimelineStep(stepper, icon, message, cssClass, detailsHTML) {
+            const step = document.createElement('div');
+            step.className = `timeline-step ${cssClass}`;
+            step.innerHTML = `
+                <span class="step-icon">${icon}</span>
+                <div class="step-content">
+                    ${escapeHTML(message)}
+                    ${detailsHTML || ''}
+                </div>
+            `;
+            stepper.appendChild(step);
+            return step;
+        }
 
         function escapeHTML(str) {
             if (!str) return '';
@@ -803,51 +1521,53 @@
                                     contentContainer.style.color = '#ff5252';
                                     break;
                                 }
+
+                                // ── Debug drawer feed ──────────────────
+                                if (payload.type === 'rpc' || payload.type === 'status') {
+                                    appendDebugLog(payload);
+                                }
+
+                                // ── Timeline step ──────────────────────
+                                if (payload.type === 'react_step') {
+                                    const stepper = getOrCreateStepper(assistantBubble);
+                                    const { step, icon, message, details } = payload;
+                                    let cssClass = 'step-' + (step || 'info');
+                                    let detailsHTML = '';
+                                    if (details && details.results && details.results.length > 0) {
+                                        const chips = details.results.map((r, i) => `
+                                            <a href="${escapeHTML(r.href)}" target="_blank" class="search-source-chip" title="${escapeHTML(r.body)}">
+                                                <span>[${i + 1}]</span><strong>${escapeHTML(r.title)}</strong>
+                                            </a>`).join('');
+                                        detailsHTML = `<div class="step-sources">${chips}</div>`;
+                                    }
+                                    appendTimelineStep(stepper, icon || '⚡', message, cssClass, detailsHTML);
+                                    document.getElementById('messages-container').scrollTop = document.getElementById('messages-container').scrollHeight;
+                                    continue;
+                                }
+
+                                // ── Legacy status: searching ───────────
                                 if (payload.status === 'searching') {
                                     contentContainer.innerHTML = '';
-                                    statusContainer.innerHTML = `
-                                        <div class="search-status-box">
-                                            <div class="search-status-header">
-                                                <span class="search-icon">🔍</span>
-                                                <span class="search-text">Searching for: "<em>${escapeHTML(payload.query)}</em>"...</span>
-                                                <span class="search-spinner"></span>
-                                            </div>
-                                        </div>
-                                    `;
+                                    const stepper = getOrCreateStepper(assistantBubble);
+                                    appendTimelineStep(stepper, '🔍', `Searching for: "${payload.query}"`, 'step-searching', '');
+                                    statusContainer.innerHTML = '';
                                     document.getElementById('messages-container').scrollTop = document.getElementById('messages-container').scrollHeight;
+                                // ── Legacy status: results ─────────────
                                 } else if (payload.status === 'results') {
                                     const results = payload.results || [];
+                                    const stepper = getOrCreateStepper(assistantBubble);
                                     if (results.length > 0) {
-                                        let chipsHTML = results.map((r, index) => `
+                                        const chips = results.map((r, i) => `
                                             <a href="${escapeHTML(r.href)}" target="_blank" class="search-source-chip" title="${escapeHTML(r.body)}">
-                                                <span>[${index + 1}]</span>
-                                                <strong>${escapeHTML(r.title)}</strong>
-                                            </a>
-                                        `).join('');
-                                        
-                                        statusContainer.innerHTML = `
-                                            <div class="search-status-box success">
-                                                <div class="search-status-header">
-                                                    <span class="search-icon">✨</span>
-                                                    <span class="search-text">Found sources:</span>
-                                                </div>
-                                                <div class="search-results-list">
-                                                    ${chipsHTML}
-                                                </div>
-                                            </div>
-                                        `;
+                                                <span>[${i + 1}]</span><strong>${escapeHTML(r.title)}</strong>
+                                            </a>`).join('');
+                                        appendTimelineStep(stepper, '✨', 'Found sources:', 'step-results', `<div class="step-sources">${chips}</div>`);
                                     } else {
-                                        statusContainer.innerHTML = `
-                                            <div class="search-status-box warning">
-                                                <div class="search-status-header">
-                                                    <span class="search-icon">⚠️</span>
-                                                    <span class="search-text">No search results found.</span>
-                                                </div>
-                                            </div>
-                                        `;
+                                        appendTimelineStep(stepper, '⚠️', 'No results found.', 'step-warning', '');
                                     }
                                     contentContainer.innerHTML = '<span class="blinking-dots">...</span>';
                                     document.getElementById('messages-container').scrollTop = document.getElementById('messages-container').scrollHeight;
+                                // ── Content tokens ─────────────────────
                                 } else if (payload.content) {
                                     if (contentContainer.querySelector('.blinking-dots')) {
                                         contentContainer.innerHTML = '';
@@ -906,6 +1626,8 @@
 
         // Initialize connection check and set poll
         checkConnection();
+        loadMcpTools();
+
         setInterval(checkConnection, 5000);
 
         // Adjust height initially
