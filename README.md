@@ -559,30 +559,30 @@ sequenceDiagram
 
 #### **Step-by-Step Execution Log (As-Is)**
 
-```log
-[2026-06-07 17:55:45.610] [INFO] [app.py:event_generator:84] Received chat stream request. Temperature=0.3
-[2026-06-07 17:55:45.617] [INFO] [app.py:event_generator:86] Message history loaded. Total messages: 1
-[2026-06-07 17:55:45.622] [INFO] [agent.py:check_and_run_tools:44] Spawning MCP server subprocess...
-[2026-06-07 17:55:45.642] [INFO] [agent.py:check_and_run_tools:47] Initializing MCP Client Session...
-[2026-06-07 17:55:46.663] [INFO] [agent.py:check_and_run_tools:66] Discovered 2 tool(s) from MCP server: ['search_web', 'calculate']
-[2026-06-07 17:55:46.664] [INFO] [agent.py:check_and_run_tools:70] [LLM Call] Checking if the model requests any tool calls (iteration 1)...
-[2026-06-07 17:55:51.850] [INFO] [agent.py:check_and_run_tools:87] Model requested 1 tool call(s) at iteration 1: ['search_web']
-[2026-06-07 17:55:51.851] [INFO] [agent.py:check_and_run_tools:110] Executing tool 'search_web' via MCP with args: {'query': 'height of the Empire State Building in feet'}
-[2026-06-07 17:55:51.855] [INFO] [search_web.py:handler:23] Executing search query: 'height of the Empire State Building in feet'
-[2026-06-07 17:55:53.313] [INFO] [search_web.py:handler:35] Search completed. Found 4 results.
-[2026-06-07 17:55:53.322] [INFO] [agent.py:check_and_run_tools:140] Tool 'search_web' execution completed successfully.
-[2026-06-07 17:55:53.323] [INFO] [agent.py:check_and_run_tools:70] [LLM Call] Checking if the model requests any tool calls (iteration 2)...
-[2026-06-07 17:56:04.808] [INFO] [agent.py:check_and_run_tools:87] Model requested 1 tool call(s) at iteration 2: ['calculate']
-[2026-06-07 17:56:04.812] [INFO] [agent.py:check_and_run_tools:110] Executing tool 'calculate' via MCP with args: {'expression': '1454 * 0.3048'}
-[2026-06-07 17:56:04.821] [INFO] [calculator.py:handler:23] Executing calculation: '1454 * 0.3048'
-[2026-06-07 17:56:04.822] [INFO] [calculator.py:handler:32] Calculation result: 443.17920000000004
-[2026-06-07 17:56:04.825] [INFO] [agent.py:check_and_run_tools:140] Tool 'calculate' execution completed successfully.
-[2026-06-07 17:56:04.826] [INFO] [agent.py:check_and_run_tools:70] [LLM Call] Checking if the model requests any tool calls (iteration 3)...
-[2026-06-07 17:56:13.214] [INFO] [agent.py:check_and_run_tools:84] No more tool calls requested by the model at iteration 3.
-[2026-06-07 17:56:13.372] [INFO] [app.py:event_generator:92] Streaming search state: status=searching, query='height of the Empire State Building in feet'
-[2026-06-07 17:56:13.373] [INFO] [app.py:event_generator:94] Streaming search results state.
-[2026-06-07 17:56:13.374] [INFO] [app.py:event_generator:99] Extending history with 4 tool message(s).
-[2026-06-07 17:56:13.374] [INFO] [app.py:event_generator:102] [LLM Call] Calling Ollama chat stream...
-[2026-06-07 17:56:26.075] [INFO] [app.py:event_generator:118] Stream completed successfully. Sent 335 chunk(s).
-[2026-06-07 17:56:26.078] [INFO] [app.py:event_generator:121] Session Summary: Total LLM Calls: 4 | Executed Tool Calls: ['search_web', 'calculate']
+```diff
+  [app.py:event_generator:84] Received chat stream request. Temperature=0.3
+  [app.py:event_generator:86] Message history loaded. Total messages: 1
+  [agent.py:check_and_run_tools:44] Spawning MCP server subprocess...
+  [agent.py:check_and_run_tools:47] Initializing MCP Client Session...
+  [agent.py:check_and_run_tools:66] Discovered 2 tool(s) from MCP server: ['search_web', 'calculate']
++ [agent.py:check_and_run_tools:70] [LLM Call] Checking if the model requests any tool calls (iteration 1)...
+  [agent.py:check_and_run_tools:87] Model requested 1 tool call(s) at iteration 1: ['search_web']
+  [agent.py:check_and_run_tools:110] Executing tool 'search_web' via MCP with args: {'query': 'height of the Empire State Building in feet'}
+  [search_web.py:handler:23] Executing search query: 'height of the Empire State Building in feet'
+  [search_web.py:handler:35] Search completed. Found 4 results.
+  [agent.py:check_and_run_tools:140] Tool 'search_web' execution completed successfully.
++ [agent.py:check_and_run_tools:70] [LLM Call] Checking if the model requests any tool calls (iteration 2)...
+  [agent.py:check_and_run_tools:87] Model requested 1 tool call(s) at iteration 2: ['calculate']
+  [agent.py:check_and_run_tools:110] Executing tool 'calculate' via MCP with args: {'expression': '1454 * 0.3048'}
+  [calculator.py:handler:23] Executing calculation: '1454 * 0.3048'
+  [calculator.py:handler:32] Calculation result: 443.17920000000004
+  [agent.py:check_and_run_tools:140] Tool 'calculate' execution completed successfully.
++ [agent.py:check_and_run_tools:70] [LLM Call] Checking if the model requests any tool calls (iteration 3)...
+  [agent.py:check_and_run_tools:84] No more tool calls requested by the model at iteration 3.
+  [app.py:event_generator:92] Streaming search state: status=searching, query='height of the Empire State Building in feet'
+  [app.py:event_generator:94] Streaming search results state.
+  [app.py:event_generator:99] Extending history with 4 tool message(s).
++ [app.py:event_generator:102] [LLM Call] Calling Ollama chat stream...
+  [app.py:event_generator:118] Stream completed successfully. Sent 335 chunk(s).
+  [app.py:event_generator:121] Session Summary: Total LLM Calls: 4 | Executed Tool Calls: ['search_web', 'calculate']
 ```
