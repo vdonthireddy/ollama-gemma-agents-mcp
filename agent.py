@@ -11,7 +11,7 @@ load_dotenv()
 # Ensure local connection works reliably on macOS (avoiding IPv6 resolution issues)
 os.environ.setdefault("OLLAMA_HOST", os.getenv("OLLAMA_HOST", "127.0.0.1"))
 
-from logger import log_info, log_error
+from logger import log_info, log_error, get_session_log_file
 
 async def check_and_run_tools(messages: list, model_name: str, session_name: str = "default") -> tuple[list[dict], dict[str, any], int]:
     """
@@ -28,10 +28,16 @@ async def check_and_run_tools(messages: list, model_name: str, session_name: str
     current_messages = list(messages)
     
     # Configure MCP stdio parameters targeting our server script
+    # Pass the session name and log file path so the MCP server writes to the same log file
+    log_filepath = get_session_log_file(session_name)
     server_params = StdioServerParameters(
         command=sys.executable,
         args=["mcp_server.py"],
-        env={**os.environ}
+        env={
+            **os.environ,
+            "SESSION_NAME": session_name,
+            "SESSION_LOG_FILE": log_filepath
+        }
     )
     
     try:

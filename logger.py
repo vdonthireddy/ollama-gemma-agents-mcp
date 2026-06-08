@@ -9,6 +9,11 @@ LOGS_DIR = os.getenv("LOGS_DIR", "logs")
 session_files = {}
 
 def get_session_log_file(session_name: str) -> str:
+    # If a specific log file is configured in the environment, use it directly
+    env_log_file = os.getenv("SESSION_LOG_FILE")
+    if env_log_file:
+        return env_log_file
+
     # Normalize session_name to prevent directory traversal or malformed paths
     normalized_name = "".join(c for c in session_name if c.isalnum() or c in "_-").strip()
     if not normalized_name:
