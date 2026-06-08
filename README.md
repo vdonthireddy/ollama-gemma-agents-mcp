@@ -10,7 +10,7 @@ A local development stack to download, serve, and interact with Google's **Gemma
 
 Below is the visual flow of the GemmaJnana local architecture.
 
-![Architecture Flow](./images/architecture_flow_v3.png)
+![Architecture Flow](./images/architecture_flow_v4.png)
 
 ### Data Flow Diagram
 
