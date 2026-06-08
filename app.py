@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from agent import check_and_run_tools
+from agent import check_and_run_tools, get_mcp_tools
 from logger import log_info, log_error
 
 app = FastAPI(title="GemmaJnana Gateway")
@@ -45,6 +45,14 @@ def health_check():
     except Exception as e:
         return {"status": "unhealthy", "error": str(e)}
 
+@app.get("/tools")
+async def get_tools():
+    try:
+        tools = await get_mcp_tools()
+        return tools
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.post("/chat")
 async def chat_completion(request: ChatRequest):
     session = request.session_name
@@ -53,7 +61,15 @@ async def chat_completion(request: ChatRequest):
         messages_list = [msg.model_dump() for msg in request.messages]
         log_info(session, f"Message history loaded. Total messages: {len(messages_list)}")
         
-        tool_messages, tool_results, tool_llm_calls = await check_and_run_tools(messages_list, MODEL_NAME, session)
+        tool_messages = []
+        tool_results = {}
+        tool_llm_calls = 0
+
+        async for event in check_and_run_tools(messages_list, MODEL_NAME, session):
+            if event["type"] == "result":
+                tool_messages = event["tool_messages"]
+                tool_results = event["tool_results"]
+                tool_llm_calls = event["llm_calls"]
 
         modified_messages = list(messages_list)
         if tool_messages:
@@ -85,7 +101,18 @@ async def chat_stream(request: ChatRequest):
             messages_list = [msg.model_dump() for msg in request.messages]
             log_info(session, f"Message history loaded. Total messages: {len(messages_list)}")
             
-            tool_messages, tool_results, tool_llm_calls = await check_and_run_tools(messages_list, MODEL_NAME, session)
+            tool_messages = []
+            tool_results = {}
+            tool_llm_calls = 0
+
+            async for event in check_and_run_tools(messages_list, MODEL_NAME, session):
+                if event["type"] == "result":
+                    tool_messages = event["tool_messages"]
+                    tool_results = event["tool_results"]
+                    tool_llm_calls = event["llm_calls"]
+                else:
+                    # Stream tracer event directly to client UI
+                    yield f"data: {json.dumps(event)}\n\n"
 
             # If any executed tool returned query and results metadata (e.g. search), stream its state to the client
             for tool_res in tool_results.values():
