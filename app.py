@@ -87,12 +87,13 @@ async def chat_stream(request: ChatRequest):
             
             tool_messages, tool_results, tool_llm_calls = await check_and_run_tools(messages_list, MODEL_NAME, session)
 
-            if "search_web" in tool_results:
-                search_data = tool_results["search_web"]
-                log_info(session, f"Streaming search state: status=searching, query='{search_data['query']}'")
-                yield f"data: {json.dumps({'status': 'searching', 'query': search_data['query']})}\n\n"
-                log_info(session, "Streaming search results state.")
-                yield f"data: {json.dumps({'status': 'results', 'results': search_data['results']})}\n\n"
+            # If any executed tool returned query and results metadata (e.g. search), stream its state to the client
+            for tool_res in tool_results.values():
+                if isinstance(tool_res, dict) and "query" in tool_res and "results" in tool_res:
+                    log_info(session, f"Streaming search state: status=searching, query='{tool_res['query']}'")
+                    yield f"data: {json.dumps({'status': 'searching', 'query': tool_res['query']})}\n\n"
+                    log_info(session, "Streaming search results state.")
+                    yield f"data: {json.dumps({'status': 'results', 'results': tool_res['results']})}\n\n"
 
             modified_messages = list(messages_list)
             if tool_messages:
